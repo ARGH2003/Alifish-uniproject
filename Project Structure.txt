@@ -1,0 +1,16 @@
+my-app/
+├── public/
+│   └── index.html  # Static HTML file, React mounts inside <div id="root"></div>
+├── src/
+│   ├── components/       # React components
+│   │   ├── Header.js     # Header component
+│   │   ├── FishCard.js   # FishCard component
+│   │   ├── Footer.js     # Footer component
+│   ├── css/              # Global styles folder
+│   │   ├── index.css     # Global styles (e.g., body styles, fonts, etc.)
+│   │   ├── header.css    # Specific styles for header component
+│   │   ├── fish-slot.css # Specific styles for fish slots
+│   │   └── bottom.css    # Specific styles for footer
+│   ├── App.js            # Main app component
+│   ├── index.js          # React entry point
+└── package.json

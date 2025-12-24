@@ -1,0 +1,60 @@
+my-react-app/
+│
+├── public/
+│   ├── index.html
+│   ├── favicon.ico
+│   └── images/
+│       ├── banner.jpg
+│       └── background.png
+│
+├── src/
+│   ├── assets/
+│   │   ├── images/
+│   │   │   ├── logo.png
+│   │   │   ├── hero.jpg
+│   │   │   └── avatar.png
+│   │   │
+│   │   └── icons/
+│   │       ├── user.svg
+│   │       ├── home.svg
+│   │       └── settings.svg
+│   │
+│   ├── components/
+│   │   ├── Header/
+│   │   │   ├── Header.jsx
+│   │   │   └── Header.css
+│   │   │
+│   │   ├── Footer/
+│   │   │   ├── Footer.jsx
+│   │   │   └── Footer.css
+│   │   │
+│   │   ├── Button/
+│   │   │   ├── Button.jsx
+│   │   │   └── Button.css
+│   │
+│   ├── pages/
+│   │   ├── Home/
+│   │   │   ├── Home.jsx
+│   │   │   └── Home.css
+│   │   │
+│   │   ├── About/
+│   │   │   ├── About.jsx
+│   │   │   └── About.css
+│   │
+│   ├── layout/
+│   │   ├── MainLayout.jsx
+│   │   └── MainLayout.css
+│   │
+│   ├── styles/
+│   │   ├── global.css
+│   │   └── variables.css
+│   │
+│   ├── utils/
+│   │   └── helpers.js
+│   │
+│   ├── App.jsx
+│   ├── index.js
+│   └── index.css
+│
+├── package.json
+└── README.md

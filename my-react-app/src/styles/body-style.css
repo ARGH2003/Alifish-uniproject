@@ -1,0 +1,41 @@
+.slot-container{
+  display: grid;
+  grid-template-columns:1fr 1fr 1fr;
+  padding: 3% 2%;
+  align-items: center;
+  justify-content: center;
+  column-gap: 3%;
+  row-gap:50px;
+  position: relative;
+  background-color: rgb(234, 234, 234);
+}
+@media(max-width:900px){
+  .slot-container{
+    margin-bottom: 35px;
+    height: 100%;
+  }
+}
+/* Large → Medium screens */
+@media (max-width: 1150px) {
+  .slot-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Medium → Small screens */
+@media (max-width: 750px) {
+  .slot-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Small phones */
+@media (max-width: 450px) {
+  .slot-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
