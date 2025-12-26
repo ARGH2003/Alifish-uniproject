@@ -1,7 +1,6 @@
 import "./FishCard.css";
 
 function FishCard({ fish, onAddToCart }) {
-  // Prevent crash if fish is undefined
   if (!fish) return null;
 
   return (
@@ -21,7 +20,7 @@ function FishCard({ fish, onAddToCart }) {
       </div>
 
       <div className="add-to">
-        <button className="cart-button" onClick={onAddToCart}>
+        <button className="cart-button" onClick={() => onAddToCart(fish)}>
           Add to cart
         </button>
       </div>

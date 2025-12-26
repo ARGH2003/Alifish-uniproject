@@ -18,29 +18,42 @@ import RegisterPage from "./pages/RegisterPage";
 function AppLayout() {
   const location = useLocation();
 
-  // 🛒 Cart
-  const [cartCount, setCartCount] = useState(0);
+  // Cart state
+  const [cartItems, setCartItems] = useState([]);
 
-  // 🔍 Search
+  // Search state
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 📄 Pagination
   const TOTAL_FISH = 12;
   const FISH_PER_PAGE = 6;
   const totalPages = Math.ceil(TOTAL_FISH / FISH_PER_PAGE);
 
-  // 🛒 Cart handlers
-  const addToCart = () => setCartCount((prev) => prev + 1);
-  const clearCart = () => setCartCount(0);
-
-  // 🔄 Reset ONLY when clicking main menu
-  const resetHome = () => {
-    setSearchQuery("");
+  // Add to cart
+  const addToCart = (fish) => {
+    setCartItems((prev) => {
+      const existing = prev.find((item) => item.id === fish.id);
+      if (existing) {
+        return prev.map((item) =>
+          item.id === fish.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        return [...prev, { ...fish, quantity: 1 }];
+      }
+    });
   };
 
-  // 👁️ UI visibility
+  // Clear cart
+  const clearCart = () => setCartItems([]);
+
+  const resetHome = () => setSearchQuery("");
+
   const showSearch = location.pathname.startsWith("/home");
   const showNB = location.pathname.startsWith("/home");
+
+  // Total items for cart icon
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <>
@@ -52,10 +65,7 @@ function AppLayout() {
       />
 
       <Routes>
-        {/* Redirect root to page 1 */}
         <Route path="/" element={<Navigate to="/home/1" />} />
-
-        {/* Home pages */}
         <Route
           path="/home/:page"
           element={
@@ -65,9 +75,10 @@ function AppLayout() {
             />
           }
         />
-
-        {/* Other pages */}
-        <Route path="/cart" element={<Cart onClearCart={clearCart} />} />
+        <Route
+          path="/cart"
+          element={<Cart cartItems={cartItems} onClearCart={clearCart} />}
+        />
         <Route path="/LP" element={<LoginPage />} />
         <Route path="/RP" element={<RegisterPage />} />
       </Routes>
