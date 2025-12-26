@@ -2,12 +2,12 @@ import "./CartItem.css";
 
 function CartItem({ cartItems = [], onClearCart }) {
   const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + Number(item.price) * item.quantity,
     0
   );
 
   const discountAmount = cartItems.reduce(
-    (sum, item) => sum + (item.price * item.discount * item.quantity) / 100,
+    (sum, item) => sum + (Number(item.price) * item.discount * item.quantity) / 100,
     0
   );
 
@@ -26,9 +26,9 @@ function CartItem({ cartItems = [], onClearCart }) {
             cartItems.map((item) => (
               <li key={item.id}>
                 <span>{item.name}</span>
-                <span>${item.price.toFixed(2)}</span>
+                <span>${Number(item.price).toFixed(2)}</span>
                 <span>x{item.quantity}</span>
-                <span>${(item.price * item.quantity).toFixed(2)}</span>
+                <span>${(Number(item.price) * item.quantity).toFixed(2)}</span>
               </li>
             ))
           )}
@@ -66,6 +66,5 @@ function CartItem({ cartItems = [], onClearCart }) {
 }
 
 export default CartItem;
-
 
 
