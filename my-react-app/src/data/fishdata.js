@@ -1,6 +1,7 @@
 // src/data/FishData.js
 const API_URL = "http://localhost/fishshop/api.php";
 
+
 export async function fetchFish() {
   const res = await fetch(API_URL);
   const data = await res.json();
