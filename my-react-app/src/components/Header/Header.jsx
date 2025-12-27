@@ -2,17 +2,35 @@ import "./Header.css";
 import logo from "../../assets/icons/logo.png";
 import mag from "../../assets/icons/mag.svg";
 import cart from "../../assets/icons/cart.svg";
+import profilePic from "../../assets/icons/user.png"; // ← replace later
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Header({ showSearch = true, cartCount = 0, onSearch }) {
   const [query, setQuery] = useState("");
+  const [user, setUser] = useState(null);
 
   const handleSearch = () => {
     if (onSearch) {
       onSearch(query);
     }
   };
+
+  // 🔥 CHECK LOGIN STATUS
+  useEffect(() => {
+    fetch("http://localhost/fishshop/check-auth.php", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.loggedIn) {
+          setUser({
+            firstName: data.firstName,
+            lastName: data.lastName,
+          });
+        }
+      });
+  }, []);
 
   return (
     <div className="header">
@@ -22,9 +40,6 @@ function Header({ showSearch = true, cartCount = 0, onSearch }) {
             <img className="logo-svg" src={logo} alt="logo" />
           </button>
         </Link>
-        <div className="logo-tool">
-          <p>Main menu</p>
-        </div>
       </div>
 
       {showSearch && (
@@ -54,26 +69,37 @@ function Header({ showSearch = true, cartCount = 0, onSearch }) {
             )}
           </button>
         </Link>
-        <div className="cart-tool">
-          <p>Your Cart</p>
-        </div>
       </div>
 
+      {/* 🔥 LOGIN / PROFILE SWITCH */}
       <div className="head-buttons">
-        <div className="login-re">
-          <Link to="/LP">
-            <button className="hb-login">Login</button>
-          </Link>
-          <p>/</p>
-          <Link to="/RP">
-            <button className="hb-register">Register</button>
-          </Link>
-        </div>
+        {!user ? (
+          <div className="login-re">
+            <Link to="/LP">
+              <button className="hb-login">Login</button>
+            </Link>
+            <p>/</p>
+            <Link to="/RP">
+              <button className="hb-register">Register</button>
+            </Link>
+          </div>
+          ) : (
+  <Link to="/user" className="user-info">
+    <img
+      src={profilePic}
+      alt="profile"
+      className="user-avatar"
+    />
+    <p className="user-name">
+      {user.firstName} {user.lastName}
+    </p>
+  </Link>
+)
+
+}
       </div>
     </div>
   );
 }
 
 export default Header;
-
-

@@ -1,0 +1,17 @@
+.user-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.order-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+.order-card ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}

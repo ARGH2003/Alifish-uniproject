@@ -1,39 +1,46 @@
 import "./Login.css";
 
 function Login() {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+
+    const res = await fetch("http://localhost/fishshop/login.php", {
+      method: "POST",
+      credentials: "include", // 🔥 REQUIRED FOR SESSIONS
+      body: formData,
+    });
+
+    const text = await res.text();
+    const data = JSON.parse(text);
+
+    alert(data.message);
+
+    if (data.status === "success") {
+      window.location.reload(); // simulate staying logged in
+    }
+  };
+
   return (
     <div className="form-container">
       <div className="form-content">
         <h2>Login</h2>
 
-        <form className="registration-form">
+        <form className="registration-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              placeholder="Username"
-              required
-            />
+            <label>Username</label>
+            <input type="text" name="username" required />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Password"
-              required
-            />
+            <label>Password</label>
+            <input type="password" name="password" required />
           </div>
 
-          <div className="form-group">
-            <button type="submit" className="submit-btn">
-              Login
-            </button>
-          </div>
+          <button type="submit" className="submit-btn">
+            Login
+          </button>
         </form>
       </div>
     </div>

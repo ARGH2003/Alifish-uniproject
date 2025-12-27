@@ -6,6 +6,8 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useState, useEffect } from "react";
+import UserPage from "./pages/UserPage";
+import ProtectedRoute from "./components/ProtectedRoute";  // Import ProtectedRoute
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -92,6 +94,16 @@ function AppLayout() {
         />
         <Route path="/LP" element={<LoginPage />} />
         <Route path="/RP" element={<RegisterPage />} />
+
+        {/* Protect the /user route */}
+        <Route
+          path="/user"
+          element={
+            <ProtectedRoute>
+              <UserPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       <Footer showNB={showNB} totalPages={totalPages} />
@@ -108,5 +120,4 @@ function App() {
 }
 
 export default App;
-
 
