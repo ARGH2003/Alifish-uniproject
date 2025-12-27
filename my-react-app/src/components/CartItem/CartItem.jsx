@@ -2,17 +2,40 @@ import "./CartItem.css";
 
 function CartItem({ cartItems = [], onClearCart }) {
   const subtotal = cartItems.reduce(
-    (sum, item) => sum + Number(item.price) * item.quantity,
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
 
   const discountAmount = cartItems.reduce(
-    (sum, item) => sum + (Number(item.price) * item.discount * item.quantity) / 100,
+    (sum, item) => sum + (item.price * item.discount * item.quantity) / 100,
     0
   );
 
   const shipping = cartItems.length > 0 ? 5 : 0;
   const total = subtotal - discountAmount + shipping;
+
+  const handlePayment = async () => {
+    try {
+      const res = await fetch("http://localhost/fishshop/api.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cartItems }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Payment successful!");
+        onClearCart();
+      } else {
+        alert("Payment failed: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      alert("Payment failed: " + err);
+    }
+  };
 
   return (
     <div className="cart-container">
@@ -26,9 +49,9 @@ function CartItem({ cartItems = [], onClearCart }) {
             cartItems.map((item) => (
               <li key={item.id}>
                 <span>{item.name}</span>
-                <span>${Number(item.price).toFixed(2)}</span>
+                <span>${item.price.toFixed(2)}</span>
                 <span>x{item.quantity}</span>
-                <span>${(Number(item.price) * item.quantity).toFixed(2)}</span>
+                <span>${(item.price * item.quantity).toFixed(2)}</span>
               </li>
             ))
           )}
@@ -55,10 +78,20 @@ function CartItem({ cartItems = [], onClearCart }) {
           </div>
         )}
 
-        <div className="payment-button-container">
-          <button className="payment-button" onClick={onClearCart}>
+        <div className="payment-button-container" style={{ display: "flex", gap: "10px" }}>
+          <button className="payment-button" onClick={handlePayment}>
             Proceed to Payment
           </button>
+
+          {cartItems.length > 0 && (
+            <button
+              className="payment-button"
+              style={{ backgroundColor: "#ccc", color: "#000" }}
+              onClick={onClearCart}
+            >
+              Clear Cart
+            </button>
+          )}
         </div>
       </div>
     </div>

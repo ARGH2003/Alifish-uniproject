@@ -5,7 +5,7 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -18,23 +18,32 @@ import RegisterPage from "./pages/RegisterPage";
 function AppLayout() {
   const location = useLocation();
 
-  const [cartItems, setCartItems] = useState([]);
+  // ✅ Initialize cart from localStorage
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
   const [searchQuery, setSearchQuery] = useState("");
 
-  const TOTAL_FISH = 18; // update to your 18 fishes
+  const TOTAL_FISH = 18;
   const FISH_PER_PAGE = 6;
   const totalPages = Math.ceil(TOTAL_FISH / FISH_PER_PAGE);
+
+  // ✅ Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   // Add to cart with stock check
   const addToCart = (fish) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === fish.id);
 
-      // If fish is already in cart
       if (existing) {
         if (existing.quantity >= fish.stock) {
           alert("Out of stock!");
-          return prev; // do not add more
+          return prev;
         } else {
           return prev.map((item) =>
             item.id === fish.id
