@@ -1,17 +1,18 @@
 <?php
 session_start();
 
-// Enable error reporting for debugging
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 header("Access-Control-Allow-Origin: http://localhost:3001");
+header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
+/* AUTH CHECK */
 if (!isset($_SESSION["user_id"])) {
-    echo json_encode(["success" => false, "error" => "Not logged in"]);
+    echo json_encode(["success" => false, "error" => "You must be logged in"]);
     exit;
 }
 
@@ -25,12 +26,12 @@ if (empty($cartItems)) {
 
 $conn = new mysqli("localhost", "root", "", "fishshop-dp");
 if ($conn->connect_error) {
-    echo json_encode(["success" => false, "error" => "DB connection failed: " . $conn->connect_error]);
+    echo json_encode(["success" => false, "error" => "Database connection failed"]);
     exit;
 }
 
 $userId = $_SESSION["user_id"];
-
+$shipping = 5;
 $subtotal = 0;
 $discount = 0;
 
@@ -39,54 +40,74 @@ foreach ($cartItems as $item) {
     $discount += ($item["price"] * $item["discount"] * $item["quantity"]) / 100;
 }
 
-$shipping = 5;
 $total = $subtotal - $discount + $shipping;
 
-/* INSERT ORDER */
-$stmt = $conn->prepare("INSERT INTO orders (user_id, total, shipping) VALUES (?, ?, ?)");
-if ($stmt === false) {
-    echo json_encode(["success" => false, "error" => "Prepare failed: " . $conn->error]);
-    exit;
-}
-$stmt->bind_param("idd", $userId, $total, $shipping);
+/* TRANSACTION START */
+$conn->begin_transaction();
 
-if (!$stmt->execute()) {
-    echo json_encode(["success" => false, "error" => "Insert order failed: " . $stmt->error]);
-    exit;
-}
+try {
+    /* CREATE ORDER */
+    $orderStmt = $conn->prepare(
+        "INSERT INTO orders (user_id, total, shipping, created_at)
+         VALUES (?, ?, ?, NOW())"
+    );
+    $orderStmt->bind_param("idd", $userId, $total, $shipping);
+    $orderStmt->execute();
+    $orderId = $orderStmt->insert_id;
 
-$orderId = $stmt->insert_id;
+    /* PREPARED STATEMENTS */
+    $itemStmt = $conn->prepare(
+        "INSERT INTO order_items (order_id, product_id, product_name, price, quantity)
+         VALUES (?, ?, ?, ?, ?)"
+    );
 
-/* INSERT ORDER ITEMS */
-$itemStmt = $conn->prepare(
-    "INSERT INTO order_items (order_id, product_id, product_name, price, quantity)
-     VALUES (?, ?, ?, ?, ?)"
-);
-if ($itemStmt === false) {
-    echo json_encode(["success" => false, "error" => "Prepare failed for order items: " . $conn->error]);
-    exit;
-}
+    $stockCheckStmt = $conn->prepare(
+        "SELECT stock FROM fish WHERE id = ? FOR UPDATE"
+    );
 
-foreach ($cartItems as $item) {
-    $itemStmt->bind_param("iisdi", $orderId, $item["id"], $item["name"], $item["price"], $item["quantity"]);
-    if (!$itemStmt->execute()) {
-        echo json_encode(["success" => false, "error" => "Insert order item failed: " . $itemStmt->error]);
-        exit;
+    $stockUpdateStmt = $conn->prepare(
+        "UPDATE fish SET stock = stock - ? WHERE id = ?"
+    );
+
+    foreach ($cartItems as $item) {
+        $productId = $item["id"];
+        $qty = $item["quantity"];
+
+        /* LOCK + CHECK STOCK */
+        $stockCheckStmt->bind_param("i", $productId);
+        $stockCheckStmt->execute();
+        $stockResult = $stockCheckStmt->get_result();
+        $row = $stockResult->fetch_assoc();
+
+        if (!$row || $row["stock"] < $qty) {
+            throw new Exception("Not enough stock for product ID {$productId}");
+        }
+
+        /* INSERT ORDER ITEM */
+        $itemStmt->bind_param(
+            "iisdi",
+            $orderId,
+            $productId,
+            $item["name"],
+            $item["price"],
+            $qty
+        );
+        $itemStmt->execute();
+
+        /* UPDATE STOCK */
+        $stockUpdateStmt->bind_param("ii", $qty, $productId);
+        $stockUpdateStmt->execute();
     }
 
-    // Update product stock
-    $stockStmt = $conn->prepare("UPDATE products SET stock = stock - ? WHERE id = ?");
-    $stockStmt->bind_param("ii", $item["quantity"], $item["id"]);
-    if (!$stockStmt->execute()) {
-        echo json_encode(["success" => false, "error" => "Failed to update stock for product ID " . $item["id"] . ": " . $stockStmt->error]);
-        exit;
-    }
+    /* COMMIT */
+    $conn->commit();
+
+    echo json_encode(["success" => true]);
+
+} catch (Exception $e) {
+    $conn->rollback();
+    echo json_encode(["success" => false, "error" => $e->getMessage()]);
 }
 
-echo json_encode(["success" => true]);
-
-$itemStmt->close();
-$stockStmt->close();
-$stmt->close();
+/* CLEANUP */
 $conn->close();
-?>
