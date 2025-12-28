@@ -15,25 +15,35 @@ function CartItem({ cartItems = [], onClearCart }) {
   const total = subtotal - discountAmount + shipping;
 
   const handlePayment = async () => {
+    if (cartItems.length === 0) {
+      alert("Your cart is empty");
+      return;
+    }
+
     try {
-      const res = await fetch("http://localhost/fishshop/api.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cartItems }),
-      });
+      const res = await fetch(
+        "http://localhost/fishshop/place-order.php",
+        {
+          method: "POST",
+          credentials: "include", // 🔥 REQUIRED for PHP sessions
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ cartItems }),
+        }
+      );
 
       const data = await res.json();
 
-      if (data.success) {
-        alert("Payment successful!");
-        onClearCart();
-      } else {
-        alert("Payment failed: " + (data.error || "Unknown error"));
+      if (!data.success) {
+        alert(data.error || "Payment failed");
+        return;
       }
+
+      alert("Payment successful!");
+      onClearCart();
     } catch (err) {
-      alert("Payment failed: " + err);
+      alert("Payment failed. Please try again.");
     }
   };
 
@@ -78,7 +88,10 @@ function CartItem({ cartItems = [], onClearCart }) {
           </div>
         )}
 
-        <div className="payment-button-container" style={{ display: "flex", gap: "10px" }}>
+        <div
+          className="payment-button-container"
+          style={{ display: "flex", gap: "10px" }}
+        >
           <button className="payment-button" onClick={handlePayment}>
             Proceed to Payment
           </button>
@@ -99,5 +112,3 @@ function CartItem({ cartItems = [], onClearCart }) {
 }
 
 export default CartItem;
-
-
