@@ -1,4 +1,4 @@
-import "./Login.css";
+import styles from "./Login.module.css";
 
 function Login() {
   const handleSubmit = async (e) => {
@@ -23,17 +23,17 @@ function Login() {
   };
 
   return (
-    <div className="form-container">
+    <div className={styles["form-container"]}>
       <div className="form-content">
         <h2>Login</h2>
 
-        <form className="registration-form" onSubmit={handleSubmit}>
-          <div className="form-group">
+        <form className={styles["registration-form"]} onSubmit={handleSubmit}>
+          <div className={styles["form-group"]}>
             <label>Username</label>
             <input type="text" name="username" required />
           </div>
 
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label>Password</label>
             <input type="password" name="password" required />
           </div>

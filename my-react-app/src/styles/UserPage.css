@@ -1,17 +1,93 @@
+/* UserPage.module.css */
+
+/* Main container for the user page */
+body{
+  background-color: rgb(234, 234, 234);
+}
 .user-page {
-  max-width: 800px;
+  max-width: 900px;
   margin: 40px auto;
-  padding: 20px;
+  padding: 30px 20px;
+  background-color: rgb(197, 197, 197);
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
 }
 
+/* Header section with welcome message and logout button */
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.user-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.logout-btn {
+  background-color: rgb(255, 46, 99); /* Red button */
+  color: rgb(234, 234, 234);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: rgb(250, 24, 77);
+}
+
+/* Orders heading */
+.user-page h3 {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+/* Individual order card */
 .order-card {
+  background-color: rgb(234, 234, 234);
   border: 1px solid #ddd;
-  padding: 15px;
+  padding: 20px;
   margin-top: 20px;
   border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
+.order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.order-card p {
+  margin: 5px 0;
+  color: rgb(37, 42, 52);
+  font-size: 14px;
+}
+
+.order-card p strong {
+  color: rgb(37, 42, 52);
+}
+
+/* List of items in each order */
 .order-card ul {
   margin-top: 10px;
   padding-left: 20px;
+}
+
+.order-card li {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: rgb(37, 42, 52);
 }

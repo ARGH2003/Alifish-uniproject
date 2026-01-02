@@ -1,4 +1,4 @@
-import "../styles/CartItem.css";
+import  "../styles/CartItem.css";
 import CartItem from "../components/CartItem/CartItem";
 
 function Cart({ cartItems, onClearCart }) {

@@ -1,4 +1,4 @@
-import "./CartItem.css";
+import styles from "./CartItem.module.css";
 
 function CartItem({ cartItems = [], onClearCart }) {
   const subtotal = cartItems.reduce(
@@ -48,11 +48,11 @@ function CartItem({ cartItems = [], onClearCart }) {
   };
 
   return (
-    <div className="cart-container">
-      <div className="cart-content">
+    <div className={styles["cart-container"]}>
+      <div className={styles["cart-content"]}>
         <h2>Shopping Cart</h2>
 
-        <ul className="cart-items">
+        <ul className={styles["cart-items"]}>
           {cartItems.length === 0 ? (
             <li>Your cart is empty</li>
           ) : (
@@ -68,20 +68,20 @@ function CartItem({ cartItems = [], onClearCart }) {
         </ul>
 
         {cartItems.length > 0 && (
-          <div className="cart-summary">
-            <div className="summary-item">
+          <div className={styles["cart-summary"]}>
+            <div className={styles["summary-item"]}>
               <span>Subtotal</span>
               <span>${subtotal.toFixed(2)}</span>
             </div>
-            <div className="summary-item">
+            <div className={styles["summary-item"]}>
               <span>Discount</span>
               <span>-${discountAmount.toFixed(2)}</span>
             </div>
-            <div className="summary-item">
+            <div className={styles["summary-item"]}>
               <span>Shipping</span>
               <span>${shipping.toFixed(2)}</span>
             </div>
-            <div className="summary-item total">
+            <div className={`${styles["summary-item"]} ${styles.total}`}>
               <span>Total</span>
               <span>${total.toFixed(2)}</span>
             </div>
@@ -89,17 +89,17 @@ function CartItem({ cartItems = [], onClearCart }) {
         )}
 
         <div
-          className="payment-button-container"
+          className={styles["payment-button-container"]}
           style={{ display: "flex", gap: "10px" }}
         >
-          <button className="payment-button" onClick={handlePayment}>
+          <button className={styles["payment-button"]} onClick={handlePayment}>
             Proceed to Payment
           </button>
 
           {cartItems.length > 0 && (
             <button
-              className="payment-button"
-              style={{ backgroundColor: "#ccc", color: "#000" }}
+              className={styles["payment-button"]}
+
               onClick={onClearCart}
             >
               Clear Cart

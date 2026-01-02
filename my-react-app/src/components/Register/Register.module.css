@@ -1,0 +1,121 @@
+/* FORM CONTAINER */
+.form-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: calc(100vh - 75px - 100px); /* subtract header + footer */
+  background-color: rgb(234, 234, 234);
+  padding-bottom: 50px; /* extra space for footer */
+}
+
+/* FORM CONTENT */
+.form-content {
+  background-color: rgb(197, 197, 197);
+  width: 450px;
+  max-width: 95%;
+  padding: 25px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* HEADING */
+.form-content h2 {
+  text-align: center;
+  margin: 0;
+  color: rgb(37, 42, 52);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* FORM */
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* FORM GROUP */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: rgb(37, 42, 52);
+}
+
+/* INPUT FIELDS */
+.registration-form input[type="text"],
+.registration-form input[type="tel"],
+.registration-form input[type="email"],
+.registration-form input[type="password"] {
+  padding: 10px;
+  font-size: 14px;
+  width: 100%;
+  border: 1px solid;
+  border-radius: 8px;
+  outline: none;
+  background-color: rgb(234, 234, 234);
+  color: rgb(37, 42, 52);
+  transition: border-color 0.2s ease;
+}
+
+.registration-form input[type="text"]:focus,
+.registration-form input[type="tel"]:focus,
+.registration-form input[type="email"]:focus,
+.registration-form input[type="password"]:focus {
+  border-color: rgb(255, 46, 99);
+}
+
+/* CHECKBOX */
+.registration-form input[type="checkbox"] {
+  margin-right: 10px;
+  accent-color: rgb(255, 46, 99);
+}
+
+/* SUBMIT BUTTON */
+button.submit-btn {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(234, 234, 234);
+  background-color: rgb(255, 46, 99) !important;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button.submit-btn:active {
+  background-color: rgb(255, 46, 99);
+}
+
+/* LINKS */
+a {
+  color: rgb(255, 46, 99);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* RESPONSIVE */
+@media (max-width: 500px) {
+  .form-content {
+    width: 90%;
+    padding: 20px;
+  }
+
+  button.submit-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+}

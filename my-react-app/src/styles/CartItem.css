@@ -107,7 +107,7 @@ ul.cart-items li span {
 }
 
 .summary-item span:last-child {
-  color: red;
+  color: rgb(255, 46, 99);
 }
 
 /* Payment button container */

@@ -1,4 +1,4 @@
-import "./Register.css";
+import styles from "./Register.module.css";
 
 function Register() {
 const handleSubmit = async (e) => {
@@ -31,53 +31,53 @@ const handleSubmit = async (e) => {
 
 
   return (
-    <div className="form-container">
-      <div className="form-content">
+    <div className={styles["form-container"]}>
+      <div className={styles["form-content"]}>
         <h2>Register</h2>
 
-        <form className="registration-form" onSubmit={handleSubmit}>
+        <form className={styles["registration-form"]} onSubmit={handleSubmit}>
 
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label>First Name</label>
             <input type="text" name="first-name" required />
           </div>
 
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label>Last Name</label>
             <input type="text" name="last-name" required />
           </div>
 
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label>Phone</label>
             <input type="tel" name="phone" required />
           </div>
 
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label>Address</label>
             <input type="text" name="address" required />
           </div>
 
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label>Email (Optional)</label>
             <input type="email" name="email" />
           </div>
 
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label>Username</label>
             <input type="text" name="username" required />
           </div>
 
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label>Password</label>
             <input type="password" name="password" required />
           </div>
 
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label>Confirm Password</label>
             <input type="password" name="confirm-password" required />
           </div>
 
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label>
               <input type="checkbox" required /> I accept the terms
             </label>
